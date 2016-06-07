@@ -1,0 +1,7 @@
+formatter.name: pretty
+suites:
+   bingo:
+       namespace: Evaneos\JWT
+       psr4_prefix: Evaneos\JWT
+       spec_path: .
+       src_path: src
