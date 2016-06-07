@@ -9,17 +9,22 @@
     {
       "name": "Rémi San",
       "email": "remi@evaneos.com"
+    },
+    {
+      "name": "Alexandre Dupuy",
+      "email": "alexandred@evaneos.com"
     }
   ],
   "require": {
     "php": ">=5.5",
     "evaneos/jwt": "^0.4",
-    "silex/silex": "^1.3",
+    "pimple/pimple": "^3.0",
     "symfony/security": "^2.7||^3.0"
   },
   "require-dev": {
     "phpspec/phpspec": "~2.0",
     "phpunit/phpunit": "^4.8",
+    "silex/silex": "^2.0",
     "symfony/browser-kit": "^3.1"
   },
   "autoload": {
