@@ -14,6 +14,6 @@ class JWTAuthenticationEntryPoint implements AuthenticationEntryPointInterface
      */
     public function start(Request $request, AuthenticationException $authException = null)
     {
-        return new Response('Json Web Token authentication failed.', 401);
+        return new Response('', 401);
     }
 }
