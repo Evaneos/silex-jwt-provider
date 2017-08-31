@@ -7,6 +7,7 @@ use Evaneos\JWT\Util\JWTUserBuilder;
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class JWTAuthenticationProvider implements AuthenticationProviderInterface
 {
@@ -50,9 +51,15 @@ class JWTAuthenticationProvider implements AuthenticationProviderInterface
             throw new AuthenticationException('Failed to decode the JWT');
         }
 
-        $token->setUser($user);
+        $authToken = $token;
+        if ($user instanceof UserInterface) {
+            $authToken = new JWTToken($user->getRoles());
+            $authToken->setToken($token->getCredentials());
+        }
 
-        return $token;
+        $authToken->setUser($user);
+
+        return $authToken;
     }
 
     /**
