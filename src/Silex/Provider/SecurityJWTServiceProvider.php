@@ -62,19 +62,19 @@ class SecurityJWTServiceProvider implements ServiceProviderInterface
             return new SecurityUserConverter();
         };
 
-        $app['security.jwt_user.builder'] = $app->protect(function ($options) use ($app) {
-            return new JWTUserBuilder(
-                $app['security.jwt_signing.decoder']($options),
-                $app['security.jwt_signing.encoder']($options),
-                $app['security.jwt_user.converter']
-            );
-        });
-
         $app['security.authentication_listener.factory.jwt'] = $app->protect(
             function ($name, $options) use ($app) {
 
+                $app['security.jwt_user.builder'] = function () use ($app, $options) {
+                    return new JWTUserBuilder(
+                        $app['security.jwt_signing.decoder']($options),
+                        $app['security.jwt_signing.encoder']($options),
+                        $app['security.jwt_user.converter']
+                    );
+                };
+
                 $app['security.authentication_provider.' . $name . '.jwt'] = function () use ($app, $options) {
-                    return new JWTAuthenticationProvider($app['security.jwt_user.builder']($options));
+                    return new JWTAuthenticationProvider($app['security.jwt_user.builder']);
                 };
 
                 $app['security.authentication_listener.' . $name . '.jwt'] = function () use ($app, $name, $options) {
