@@ -17,7 +17,7 @@
   ],
   "require": {
     "php": ">=5.5",
-    "evaneos/jwt": "^0.4",
+    "evaneos/jwt": "^0.5.0",
     "pimple/pimple": "^3.0",
     "symfony/security": "^2.7||^3.0"
   },
