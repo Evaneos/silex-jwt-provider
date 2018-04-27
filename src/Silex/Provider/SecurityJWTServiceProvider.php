@@ -50,16 +50,31 @@ class SecurityJWTServiceProvider implements ServiceProviderInterface
             }
         );
 
+        $app['security.jwt_signing.decoder'] = $app->protect(function ($options) {
+            return new JWTDecoder($options['secret_key'], $options['allowed_algorithms']);
+        });
+
+        $app['security.jwt_signing.encoder'] = $app->protect(function ($options) {
+            return new JWTEncoder($options['secret_key'], reset($options['allowed_algorithms']));
+        });
+
+        $app['security.jwt_user.converter'] = function () {
+            return new SecurityUserConverter();
+        };
+
         $app['security.authentication_listener.factory.jwt'] = $app->protect(
             function ($name, $options) use ($app) {
 
-                $app['security.authentication_provider.' . $name . '.jwt'] = function () use ($app, $options) {
-                    $encoder = new JWTEncoder($options['secret_key'], reset($options['allowed_algorithms']));
-                    $decoder = new JWTDecoder($options['secret_key'], $options['allowed_algorithms']);
-                    $converter = new SecurityUserConverter();
-                    $userBuilder = new JWTUserBuilder($decoder, $encoder, $converter);
+                $app['security.jwt_user.builder'] = function () use ($app, $options) {
+                    return new JWTUserBuilder(
+                        $app['security.jwt_signing.decoder']($options),
+                        $app['security.jwt_signing.encoder']($options),
+                        $app['security.jwt_user.converter']
+                    );
+                };
 
-                    return new JWTAuthenticationProvider($userBuilder);
+                $app['security.authentication_provider.' . $name . '.jwt'] = function () use ($app, $options) {
+                    return new JWTAuthenticationProvider($app['security.jwt_user.builder']);
                 };
 
                 $app['security.authentication_listener.' . $name . '.jwt'] = function () use ($app, $name, $options) {
