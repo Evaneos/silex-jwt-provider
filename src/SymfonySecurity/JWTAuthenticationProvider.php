@@ -47,7 +47,7 @@ class JWTAuthenticationProvider implements AuthenticationProviderInterface
         try {
             $user = $this->userBuilder->buildUserFromToken($token->getCredentials());
         } catch (JWTDecodeUnexpectedValueException $e) {
-            throw new AuthenticationException('Failed to decode the JWT');
+            throw new AuthenticationException('Failed to decode the JWT', 0, $e);
         }
 
         $token->setUser($user);
