@@ -8,12 +8,13 @@ use Evaneos\JWT\JWTRetrieval\QueryParameterStrategy;
 use Evaneos\JWT\SymfonySecurity\JWTListener;
 use Evaneos\JWT\Silex\Provider\SecurityJWTServiceProvider;
 use Firebase\JWT\JWT;
+use PHPUnit\Framework\TestCase;
 use Silex\Application;
 use Silex\Provider\SecurityServiceProvider;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
 
-class SecurityJWTServiceProviderTest extends \PHPUnit_Framework_TestCase
+class SecurityJWTServiceProviderTest extends TestCase
 {
     /**
      * @var Application
